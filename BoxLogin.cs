@@ -26,7 +26,7 @@ namespace BoxUpload
 {
     public partial class BoxLogin : Form
     {
-        public string connCode { get; set; }
+      
         public static string token { get; set; }
 
         public static string sBoxClientId { get; set; }
@@ -40,7 +40,7 @@ namespace BoxUpload
             
             InitializeComponent();
             System.Windows.Forms.TextBox.CheckForIllegalCrossThreadCalls = false;
-
+            OnDelConnBox += new DelConnBox(afterWebChange);
         }
     
 
@@ -60,7 +60,8 @@ namespace BoxUpload
                 webBrowser1.Document.Write(strHtml);
                 lbUserName.Visible = false;
                 label1.Visible = false;
-        
+              
+
 
             }
             catch(Exception ex)
@@ -71,6 +72,7 @@ namespace BoxUpload
           
 
         }
+       
         private string LoginPage_Load( )
         {
             ServicePointManager.SecurityProtocol = (SecurityProtocolType)(0xc0 | 0x300 | 0xc00);
@@ -95,7 +97,11 @@ namespace BoxUpload
                 System.IO.StreamReader sr = new System.IO.StreamReader(resStream, enc);
                 string js = sr.ReadToEnd();
                 sr.Close();
+             
+               
+
                 return js;
+
 
             }
             catch(Exception ex)
@@ -104,16 +110,56 @@ namespace BoxUpload
             }
 
         }
-
-        private async void ShowUser_ClickAsync(object sender, EventArgs e)
+        private string connCode;
+        public string ConnCode 
         {
-            
+            get 
+            {
+               
+                return connCode; 
+            }
+            set
+            {
+                if (webBrowser1.Url.ToString().Contains("code"))
+                {
+                    connCode = webBrowser1.Url.ToString();
+                    whenWebChange();
+                }
+
+               
+            }
+        }
+        public delegate void DelConnBox(object sender, EventArgs e);
+        public event DelConnBox OnDelConnBox;
+        private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            ConnCode = webBrowser1.Url.ToString();
+        }
+        private async void afterWebChange(object sender,EventArgs e)
+        {
+            await ShowUserInfo();
+           // webBrowser1.Visible = false;
+
+        }
+        private void whenWebChange()
+        {
+            if (OnDelConnBox != null)
+            {
+                OnDelConnBox(this, null);
+            }
+        }
+
+
+       // private async void ShowUser_ClickAsync(object sender, EventArgs e)]
+        private async Task ShowUserInfo()
+        {
+          
             if (webBrowser1.Url != null)
             {
                 webBrowser1.Visible = false;
               //  MessageBox.Show(webBrowser1.Url.ToString());
-                connCode = webBrowser1.Url.ToString();
-                string code =connCode.Split('?')[1].Substring(5);
+               // connCode = webBrowser1.Url.ToString();
+                string code =this.ConnCode.Split('?')[1].Substring(5);
                 BoxConn boxConn = new BoxConn(code,sBoxClientId,sBoxClientSecret);
                 token=boxConn.token;
                 await SetForm.GetInfo();
@@ -121,7 +167,7 @@ namespace BoxUpload
                 lbUserName.Visible = true;
                 label1.Visible = true;
                 SetFileList("0");
-                ShowUser.Visible = false;
+          
 
             }
             else
@@ -234,7 +280,10 @@ namespace BoxUpload
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message.ToString());
+                if(e.Message!= "リモート サーバーがエラーを返しました: (404) 見つかりません")
+                {
+                    MessageBox.Show(e.Message.ToString());
+                }  
                 return null;
             }
 
@@ -302,7 +351,10 @@ namespace BoxUpload
             }
             catch (Exception e)
             {
+               
                 MessageBox.Show(e.Message.ToString());
+                
+               
                 
             }
 
@@ -668,6 +720,8 @@ namespace BoxUpload
                
             }
         }
+
+        
     }
     public class SetForm
     {

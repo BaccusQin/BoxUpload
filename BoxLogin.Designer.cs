@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
-            this.ShowUser = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.lbUserName = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
@@ -60,21 +59,13 @@
             // 
             // webBrowser1
             // 
-            this.webBrowser1.Location = new System.Drawing.Point(214, -1);
+            this.webBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.webBrowser1.Location = new System.Drawing.Point(0, 0);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(672, 397);
+            this.webBrowser1.Size = new System.Drawing.Size(884, 478);
             this.webBrowser1.TabIndex = 0;
-            // 
-            // ShowUser
-            // 
-            this.ShowUser.Location = new System.Drawing.Point(43, 46);
-            this.ShowUser.Name = "ShowUser";
-            this.ShowUser.Size = new System.Drawing.Size(114, 38);
-            this.ShowUser.TabIndex = 1;
-            this.ShowUser.Text = "データ連携";
-            this.ShowUser.UseVisualStyleBackColor = true;
-            this.ShowUser.Click += new System.EventHandler(this.ShowUser_ClickAsync);
+            this.webBrowser1.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser1_DocumentCompleted);
             // 
             // label1
             // 
@@ -108,7 +99,7 @@
             this.dataGridView1.Location = new System.Drawing.Point(244, 95);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 21;
-            this.dataGridView1.Size = new System.Drawing.Size(590, 351);
+            this.dataGridView1.Size = new System.Drawing.Size(590, 271);
             this.dataGridView1.TabIndex = 4;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
@@ -176,7 +167,6 @@
             this.panel1.Controls.Add(this.btnFromPath);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.lbUserName);
-            this.panel1.Controls.Add(this.ShowUser);
             this.panel1.Location = new System.Drawing.Point(1, -1);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(212, 480);
@@ -184,7 +174,7 @@
             // 
             // btnInvoice
             // 
-            this.btnInvoice.Location = new System.Drawing.Point(44, 225);
+            this.btnInvoice.Location = new System.Drawing.Point(44, 169);
             this.btnInvoice.Name = "btnInvoice";
             this.btnInvoice.Size = new System.Drawing.Size(113, 39);
             this.btnInvoice.TabIndex = 10;
@@ -197,7 +187,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.label4.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label4.Location = new System.Drawing.Point(11, 166);
+            this.label4.Location = new System.Drawing.Point(11, 110);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(92, 15);
             this.label4.TabIndex = 9;
@@ -206,7 +196,7 @@
             // textBox3
             // 
             this.textBox3.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.textBox3.Location = new System.Drawing.Point(11, 184);
+            this.textBox3.Location = new System.Drawing.Point(11, 128);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(132, 22);
             this.textBox3.TabIndex = 8;
@@ -214,7 +204,7 @@
             // btnToPath
             // 
             this.btnToPath.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.btnToPath.Location = new System.Drawing.Point(149, 184);
+            this.btnToPath.Location = new System.Drawing.Point(149, 128);
             this.btnToPath.Name = "btnToPath";
             this.btnToPath.Size = new System.Drawing.Size(47, 22);
             this.btnToPath.TabIndex = 7;
@@ -227,7 +217,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.label3.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label3.Location = new System.Drawing.Point(11, 104);
+            this.label3.Location = new System.Drawing.Point(11, 48);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(83, 15);
             this.label3.TabIndex = 6;
@@ -236,7 +226,7 @@
             // textBox2
             // 
             this.textBox2.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.textBox2.Location = new System.Drawing.Point(11, 122);
+            this.textBox2.Location = new System.Drawing.Point(11, 66);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(132, 22);
             this.textBox2.TabIndex = 5;
@@ -244,7 +234,7 @@
             // btnFromPath
             // 
             this.btnFromPath.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.btnFromPath.Location = new System.Drawing.Point(149, 122);
+            this.btnFromPath.Location = new System.Drawing.Point(149, 66);
             this.btnFromPath.Name = "btnFromPath";
             this.btnFromPath.Size = new System.Drawing.Size(47, 22);
             this.btnFromPath.TabIndex = 4;
@@ -279,11 +269,12 @@
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(214, 393);
+            this.textBox4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.textBox4.Location = new System.Drawing.Point(244, 372);
             this.textBox4.Multiline = true;
             this.textBox4.Name = "textBox4";
             this.textBox4.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox4.Size = new System.Drawing.Size(672, 86);
+            this.textBox4.Size = new System.Drawing.Size(590, 93);
             this.textBox4.TabIndex = 12;
             // 
             // BoxLogin
@@ -291,8 +282,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 478);
-            this.Controls.Add(this.textBox4);
             this.Controls.Add(this.webBrowser1);
+            this.Controls.Add(this.textBox4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -317,7 +308,6 @@
         #endregion
 
         private System.Windows.Forms.WebBrowser webBrowser1;
-        private System.Windows.Forms.Button ShowUser;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lbUserName;
         private System.Windows.Forms.DataGridView dataGridView1;
