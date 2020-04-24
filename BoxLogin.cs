@@ -610,30 +610,30 @@ namespace BoxUpload
                 {
                     string sourceFileName = textBox2.Text.Split(',')[0];
                     string TargetPath = textBox3.Text + @"\\";
-
-
-
-                    SetRectangle ktcInvoiceCustRec = new SetRectangle(100, 100, 50, 100, sourceFileName);
-                    SetRectangle ktcInvoiceDateRec = new SetRectangle(20, 350, 50, 20, sourceFileName);
-
-                    SetRectangle otcInvoiceCustRec = new SetRectangle(0, 450, 350, 50, sourceFileName);
-                    SetRectangle otcInvoiceDateRec = new SetRectangle(350, 550, 200, 5, sourceFileName);
-                    SetRectangle invoiceDateRec;
-                    SetRectangle invoiceCustRec;
-
-                    if (Regex.IsMatch(ktcInvoiceCustRec.GetPreName(1).Substring(7).Split(' ')[0], @"^[+-]?\d*[.]?\d*$"))
+                    SetRectangle JudgePDFType = new SetRectangle(100, 0, 50, 300, sourceFileName);
+                    int cx1 = 0, cy1 = 0, cx2 = 0, cy2 = 0, dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0;
+                    if (JudgePDFType.GetPreName(1).Length >= 7)
                     {
-                        invoiceDateRec = ktcInvoiceDateRec;
-                        invoiceCustRec = ktcInvoiceCustRec;
+                        if (Regex.IsMatch(JudgePDFType.GetPreName(1).Substring(7).Split(' ')[0], @"^[+-]?\d*[.]?\d*$"))
+                        {
+                            cx1 = 100; cy1 = 0; cx2 = 50; cy2 = 300;
+                            dx1 = 50; dy1 = 350; dx2 = 10; dy2 = 20;
+                        }
+                        else
+                        {
+                            cx1 = 0; cy1 = 450; cx2 = 400; cy2 = 50;
+                            dx1 = 330; dy1 = 540; dx2 = 150; dy2 = 15;
+                        }
+
                     }
                     else
                     {
-                        invoiceDateRec = otcInvoiceDateRec;
-                        invoiceCustRec = otcInvoiceCustRec;
-
+                        cx1 = 0; cy1 = 450; cx2 = 400; cy2 = 50;
+                        dx1 = 330; dy1 = 540; dx2 = 150; dy2 = 15;
                     }
 
-
+                    SetRectangle invoiceCustRec = new SetRectangle(cx1, cy1, cx2, cy2, sourceFileName);
+                    SetRectangle invoiceDateRec = new SetRectangle(dx1, dy1, dx2, dy2, sourceFileName);
 
                     int times = 1;
 
