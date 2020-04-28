@@ -237,6 +237,7 @@ namespace BoxUpload
 
 
         }
+        /*
         public string GetFileMail(string sToken, string folderCode, int Flag)
         {
             try
@@ -288,31 +289,15 @@ namespace BoxUpload
             }
 
         }
+        */
         public  async void SetFileList(string folderCode)
         {
             try
             {
-                /*
-                string sUrl = "https://api.box.com/2.0/folders/" + folderCode + "/items";
-                Common folderTable = new Common();
-                System.Net.HttpWebRequest req = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(sUrl);
-                System.Text.StringBuilder sb = new System.Text.StringBuilder();
-                byte[] ba = System.Text.Encoding.UTF8.GetBytes(sb.ToString());
-                System.Text.Encoding enc = System.Text.Encoding.GetEncoding("utf-8");
-
-                req.Method = "GET";
-                req.Headers.Add("Authorization: Bearer " + BoxLogin.token);
-            
-
-                System.Net.WebResponse res = req.GetResponse();
-                System.IO.Stream resStream = res.GetResponseStream();
-                System.IO.StreamReader sr = new System.IO.StreamReader(resStream, enc);
-                string js = sr.ReadToEnd();
-                JObject Json = JObject.Parse(js);
-                folderTable.json = Json["entries"].ToString();
-                */
+                
                 BoxCollection<BoxItem> items = await SetForm.client.FoldersManager.GetFolderItemsAsync(folderCode, 1000);
-            
+               
+              
                 DataTable blindData = new DataTable();
                 blindData.Columns.Add("id", Type.GetType("System.String"));
                 blindData.Columns.Add("name", Type.GetType("System.String"));
@@ -321,10 +306,20 @@ namespace BoxUpload
                 {
                     DataRow row = blindData.NewRow();
                     row["id"] = x.Id.ToString();
+                  
                     row["name"] = x.Name.ToString();
+
+                    BoxCollection < BoxCollaboration > collaborations = await SetForm.client.FoldersManager.GetCollaborationsAsync(x.Id.ToString());
+                    string strEmail="";
+                    foreach (BoxCollaboration y in collaborations.Entries)
+                    {
+                        strEmail = strEmail + ((Box.V2.Models.BoxUser)y.AccessibleBy).Login+";";
+                    }
+                    row["Email"] = strEmail;
                     blindData.Rows.Add(row);
                 }       
                 DataTable csvTable = blindData.Copy();
+                /*
                 foreach (DataRow myrow in blindData.Rows)
                 {
                     myrow[2] = GetFileMail(BoxLogin.token, myrow[0].ToString(), 2);
@@ -333,7 +328,7 @@ namespace BoxUpload
                 {
                     myrow[2] = GetFileMail(BoxLogin.token, myrow[0].ToString(), 1);
                 }
-
+                */
                 
                 if (blindData.Rows.Count != 0)
                 {
@@ -447,7 +442,7 @@ namespace BoxUpload
                 {
 
                     string ID = myRow[0].ToString();
-                    string mail = myRow[2].ToString();
+                    string mail = myRow[2].ToString().Split(';')[0];
                     await SetColl(ID, mail);
                     /*
                     TakesWhileDelegate d1 = SetColl;
