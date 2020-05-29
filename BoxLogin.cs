@@ -203,11 +203,12 @@ namespace BoxUpload
 
 
 
-                BoxCollaborationRequest requestParams = new BoxCollaborationRequest()
+                BoxCollaborationRequest FileRequestParams = new BoxCollaborationRequest()
                 {
                     Item = new BoxRequestEntity()
                     {
-                        Type = BoxType.folder,
+                        Type = BoxType.file,
+
                         Id = sFod
                     },
                     Role = "editor",
@@ -217,9 +218,33 @@ namespace BoxUpload
                         Login = shareMail
                     }
                 };
+                BoxCollaborationRequest FolderRequestParams = new BoxCollaborationRequest()
+                {
+                    Item = new BoxRequestEntity()
+                    {
+                        Type = BoxType.folder,
+
+                        Id = sFod
+                    },
+                    Role = "editor",
+                    AccessibleBy = new BoxCollaborationUserRequest()
+                    {
+                        Type = BoxType.user,
+                        Login = shareMail
+                    }
+                };
                 if (shareMail != "" && shareMail != null)
                 {
-                    BoxCollaboration collab = await SetForm.client.CollaborationsManager.AddCollaborationAsync(requestParams);
+                    BoxCollaboration collab;
+                    try
+                    {
+                       collab = await SetForm.client.CollaborationsManager.AddCollaborationAsync(FolderRequestParams);
+                    }
+                    catch
+                    {
+                       collab = await SetForm.client.CollaborationsManager.AddCollaborationAsync(FileRequestParams);
+                    }
+                    
                 }
                 else
                 {
@@ -294,22 +319,35 @@ namespace BoxUpload
         {
             try
             {
-                
-                BoxCollection<BoxItem> items = await SetForm.client.FoldersManager.GetFolderItemsAsync(folderCode, 1000);
-               
-              
+                BoxCollection<BoxItem> items;
+                try
+                {
+                    items = await SetForm.client.FoldersManager.GetFolderItemsAsync(folderCode, 1000);
+                }
+                catch
+                {
+                    throw new Exception("This is not a folder. No files inside");
+                }
                 DataTable blindData = new DataTable();
                 blindData.Columns.Add("id", Type.GetType("System.String"));
                 blindData.Columns.Add("name", Type.GetType("System.String"));
                 blindData.Columns.Add("Email", Type.GetType("System.String"));
+                BoxCollection<BoxCollaboration> collaborations;
                 foreach (BoxItem x in items.Entries)
                 {
                     DataRow row = blindData.NewRow();
                     row["id"] = x.Id.ToString();
                   
                     row["name"] = x.Name.ToString();
-
-                    BoxCollection < BoxCollaboration > collaborations = await SetForm.client.FoldersManager.GetCollaborationsAsync(x.Id.ToString());
+                    if (x.Type.ToString() == "folder")
+                    {
+                        collaborations = await SetForm.client.FoldersManager.GetCollaborationsAsync(x.Id.ToString());
+                    }
+                    else
+                    {
+                        collaborations = await SetForm.client.FilesManager.GetCollaborationsAsync(x.Id.ToString());
+                    }
+                    
                     string strEmail="";
                     foreach (BoxCollaboration y in collaborations.Entries)
                     {
@@ -338,6 +376,7 @@ namespace BoxUpload
                     dataGridView1.Columns["name"].DataPropertyName = "name";
                     dataGridView1.Columns["Email"].DataPropertyName = "Email";
                 }
+                
           
                 outPutCsvTable = csvTable;
        
